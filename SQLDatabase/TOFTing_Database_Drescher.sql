@@ -1,0 +1,25 @@
+CREATE DATABASE IF NOT EXISTS TOFTing;
+
+USE TOFTing;
+
+CREATE TABLE IF NOT EXISTS department(
+    pk_departmentID INTEGER AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(40)
+);
+
+CREATE TABLE IF NOT EXISTS location(
+  pk_locationID INTEGER AUTO_INCREMENT PRIMARY KEY ,
+  roomNumber VARCHAR(10),
+  name VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS user(
+  pk_guID VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS achievement(
+    pk_achievementID INTEGER AUTO_INCREMENT PRIMARY KEY ,
+    name VARCHAR(30),
+    fk_departmentID INTEGER,
+    description TEXT
+);

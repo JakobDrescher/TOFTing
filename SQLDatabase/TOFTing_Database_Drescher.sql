@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS department
 CREATE TABLE IF NOT EXISTS location
 (
     pk_locationID INTEGER AUTO_INCREMENT PRIMARY KEY,
-    roomNumber    VARCHAR(10),
+    roomNumber    VARCHAR(30),
     name          VARCHAR(30)
 );
 
@@ -38,9 +38,10 @@ CREATE TABLE IF NOT EXISTS userPossessesAchievement(
 );
 
 CREATE TABLE IF NOT EXISTS achievementAtLocation(
-    pk_fk_achievementID INTEGER,
-    pk_fk_locationID INTEGER,
-    CONSTRAINT PRIMARY KEY (pk_fk_achievementID,pk_fk_locationID),
-    FOREIGN KEY fk_achievementAtLocation_achievement (pk_fk_achievementID) REFERENCES achievement(pk_achievementID),
-    FOREIGN KEY fk_achievementAtLocation_location (pk_fk_locationID) REFERENCES location(pk_locationID)
+    pk_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+    fk_achievementID INTEGER,
+    fk_locationID INTEGER,
+    CONSTRAINT UNIQUE (fk_achievementID,fk_locationID),
+    FOREIGN KEY fk_achievementAtLocation_achievement (fk_achievementID) REFERENCES achievement(pk_achievementID),
+    FOREIGN KEY fk_achievementAtLocation_location (fk_locationID) REFERENCES location(pk_locationID)
 );

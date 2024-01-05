@@ -32,7 +32,15 @@ VALUES ('Zauberlehrling', 1,
        ('Kabel-Action', 2, 'Projekte von der FS mit NWT Focus'),
        ('The End?', 2, '	Enter a stronghold End Portal activated with all twelve eyes of ender.');
 
-INSERT INTO achievementatlocation (fk_achievementID, fk_locationID) VALUES (1,7),(2,3),(3,1),(3,2),(4,null),(5,6),(6,4),(7,5);
+INSERT INTO achievementatlocation (fk_achievementID, fk_locationID)
+VALUES (1, 7),
+       (2, 3),
+       (3, 1),
+       (3, 2),
+       (4, null),
+       (5, 6),
+       (6, 4),
+       (7, 5);
 
 INSERT INTO userpossessesachievement
 VALUES ('test1', 1),
@@ -50,3 +58,15 @@ VALUES ('test1', 1),
        ('test5', 5),
        ('test5', 6),
        ('test5', 7);
+
+-- Test Selects
+SELECT *
+FROM achievement
+WHERE fk_departmentID = 1;
+
+SELECT u.pk_guID, a.name, a.description, d.name
+FROM user u
+         JOIN userpossessesachievement up ON (u.pk_guID = up.pk_fk_guID)
+         JOIN achievement a ON (up.pk_fk_achievementID = a.pk_achievementID)
+         JOIN department d ON (d.pk_departmentID = a.fk_departmentID)
+WHERE u.pk_guID='test5';

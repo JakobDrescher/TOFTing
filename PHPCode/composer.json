@@ -1,0 +1,16 @@
+{
+    "name": "jdres/tofting",
+    "description": "The PHP-Classes and API for the schoolproject TOFTing. Which aims to enhance the avarage TOFT experience by adding an achievement system",
+    "autoload": {
+        "psr-4": {
+            "Jdres\\Tofting\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "JakobDrescher",
+            "email": "jakobdrescher6@gmail.com"
+        }
+    ],
+    "require": {}
+}

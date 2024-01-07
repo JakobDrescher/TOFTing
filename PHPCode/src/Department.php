@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Jdres\Tofting;
 
+use JsonSerializable;
+
 /**
  * A class to store department data
  */
-class Department
+class Department implements JsonSerializable
 {
     private int $id;
     private string $name;
@@ -35,5 +37,15 @@ class Department
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'department' => [
+                'id' => $this->id,
+                'name' => $this->name
+            ]
+        ];
     }
 }

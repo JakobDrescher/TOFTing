@@ -2,13 +2,16 @@
 declare(strict_types=1);
 
 namespace Jdres\Tofting;
+
+use JsonSerializable;
+
 const BASE_PATH = __DIR__ . "/../";
 require BASE_PATH . '/vendor/autoload.php';
 
 /**
  * A class to store achievement data
  */
-class Achievement
+class Achievement implements JsonSerializable
 {
     private int $id;
     private string $name;
@@ -81,5 +84,19 @@ class Achievement
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'achievement' => [
+                'id' => $this->id,
+                'name' => $this->name,
+                'pictureFilename' => $this->pictureFilename,
+                'department' => $this->department,
+                'location' => $this->location,
+                'description' => $this->description
+            ]
+        ];
     }
 }

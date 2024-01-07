@@ -89,14 +89,12 @@ class Achievement implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'achievement' => [
                 'id' => $this->id,
                 'name' => $this->name,
-                'pictureFilename' => $this->pictureFilename,
+                'icon' => $this->pictureFilename,
                 'department' => $this->department,
                 'location' => $this->location,
                 'description' => $this->description
-            ]
         ];
     }
 }

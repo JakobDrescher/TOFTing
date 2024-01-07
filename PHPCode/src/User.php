@@ -31,9 +31,7 @@ class User implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'user' => [
-                'guid' => $this->guid
-            ]
+            'guid' => $this->guid
         ];
     }
 }

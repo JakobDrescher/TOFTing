@@ -17,7 +17,7 @@ class Achievement implements JsonSerializable
     private string $name;
     private string $pictureFilename;
     private Department $department;
-    private Location $location;
+    private array $locations;
     private string $description;
 
     /**
@@ -25,16 +25,16 @@ class Achievement implements JsonSerializable
      * @param string $name
      * @param string $pictureFilename
      * @param Department $department
-     * @param Location $location
+     * @param array $locations
      * @param string $description
      */
-    public function __construct(int $id, string $name, string $pictureFilename, Department $department, Location $location, string $description)
+    public function __construct(int $id, string $name, string $pictureFilename, Department $department, array $locations, string $description)
     {
         $this->id = $id;
         $this->name = $name;
         $this->pictureFilename = $pictureFilename;
         $this->department = $department;
-        $this->location = $location;
+        $this->locations = $locations;
         $this->description = $description;
     }
 
@@ -71,11 +71,11 @@ class Achievement implements JsonSerializable
     }
 
     /**
-     * @return Location
+     * @return array
      */
-    public function getLocation(): Location
+    public function getLocation(): array
     {
-        return $this->location;
+        return $this->locations;
     }
 
     /**
@@ -93,7 +93,7 @@ class Achievement implements JsonSerializable
                 'name' => $this->name,
                 'icon' => $this->pictureFilename,
                 'department' => $this->department,
-                'location' => $this->location,
+                'location' => $this->locations,
                 'description' => $this->description
         ];
     }

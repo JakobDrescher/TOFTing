@@ -11,5 +11,6 @@ $testDepartment = new Department(1, "Informationstechnologie");
 $testLocation = new Location("1", "PH (157)", "Physiksaal");
 $testAchievement = new Achievement(1, "Wissenschaftler", "achievement_2_TOFTing_Dragan.png", $testDepartment, $testLocation, "Höchst wissenschaftliche Wörter");
 
-var_dump($testUser);
-var_dump($testAchievement);
+echo json_encode($testUser);
+echo "\n\n";
+echo json_encode($testAchievement);

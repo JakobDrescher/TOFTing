@@ -1,5 +1,6 @@
 <script setup>
 import Achievement from './components/Achievement.vue'
+
 </script>
 
 <template>

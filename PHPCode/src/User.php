@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Jdres\Tofting;
 
+use JsonSerializable;
+
 /**
  * A class to store user data
  */
-class User
+class User implements JsonSerializable
 {
     private string $guid;
 
@@ -24,5 +26,14 @@ class User
     public function getGuid(): string
     {
         return $this->guid;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'user' => [
+                'guid' => $this->guid
+            ]
+        ];
     }
 }

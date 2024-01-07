@@ -4,7 +4,7 @@ require __DIR__ . '/vendor/autoload.php';
 use Jdres\Tofting\User;
 use Jdres\Tofting\Department;
 use Jdres\Tofting\Location;
-use \Jdres\Tofting\Achievement;
+use Jdres\Tofting\Achievement;
 
 $testUser = new User("testUser");
 $testDepartment = new Department(1, "Informationstechnologie");

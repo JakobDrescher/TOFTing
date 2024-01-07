@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Jdres\Tofting;
 
+use JsonSerializable;
+
 /**
  * A class to store location data
  */
-class Location
+class Location implements JsonSerializable
 {
     private int $id;
     private string $roomNumber;
@@ -46,5 +48,16 @@ class Location
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'location' => [
+                'id' => $this->id,
+                'roomNumber' => $this->roomNumber,
+                'name' => $this->name
+            ]
+        ];
     }
 }

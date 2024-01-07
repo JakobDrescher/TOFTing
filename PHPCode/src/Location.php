@@ -53,11 +53,9 @@ class Location implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'location' => [
                 'id' => $this->id,
                 'roomNumber' => $this->roomNumber,
                 'name' => $this->name
-            ]
         ];
     }
 }

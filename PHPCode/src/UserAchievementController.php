@@ -48,11 +48,9 @@ class UserAchievementController
 
     public function getAllAchievements():string{
         $result = array();
-        $sql = "SELECT a.pk_achievementID,a.name AS achievementName,d.pk_departmentID,d.name AS departmentName,a.description
-                FROM user u 
-                    JOIN userpossessesachievement up ON (u.pk_guID = up.pk_fk_guID) 
-                    JOIN achievement a ON (up.pk_fk_achievementID = a.pk_achievementID) 
-                    LEFT JOIN department d ON (d.pk_departmentID = a.fk_departmentID);";
+        $sql = "SELECT a.pk_achievementID, a.name AS achievementName, d.pk_departmentID, d.name AS departmentName, a.description 
+                FROM achievement a 
+                    JOIN department d on d.pk_departmentID = a.fk_departmentID;";
         $stmt = DB->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch()) {

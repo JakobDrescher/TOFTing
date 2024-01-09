@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jdres\Tofting;
 
-require BASE_PATH . '/vendor/autoload.php';
+require BASE_PATH.'/vendor/autoload.php';
 
 use Jdres\Tofting\User;
 use Jdres\Tofting\Department;
@@ -24,7 +24,7 @@ class UserAchievementController
                 FROM user u 
                     JOIN userpossessesachievement up ON (u.pk_guID = up.pk_fk_guID) 
                     JOIN achievement a ON (up.pk_fk_achievementID = a.pk_achievementID) 
-                    JOIN department d ON (d.pk_departmentID = a.fk_departmentID)  
+                    LEFT JOIN department d ON (d.pk_departmentID = a.fk_departmentID)  
                 WHERE u.pk_guID= :guid;";
         $stmt = DB->prepare($sql);
         $stmt->bindValue(':guid', $guid);
@@ -41,7 +41,6 @@ class UserAchievementController
             while ($row2 = $stmt2->fetch()) {
                 $locations[] = new Location($row2['pk_locationID'], $row2['roomNumber'], $row2['name']);
             }
-            print_r($locations);
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);

@@ -6,7 +6,7 @@ namespace Jdres\Tofting;
 use JsonSerializable;
 
 const BASE_PATH = __DIR__ . "/../";
-require BASE_PATH . '/vendor/autoload.php';
+require BASE_PATH.'/vendor/autoload.php';
 
 /**
  * A class to store achievement data

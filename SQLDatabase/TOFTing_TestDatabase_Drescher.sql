@@ -64,7 +64,7 @@ SELECT *
 FROM achievement
 WHERE fk_departmentID = 1;
 
-SELECT u.pk_guID, a.name, a.description, d.name
+SELECT a.pk_achievementID,a.name,d.pk_departmentID,d.name,a.description
 FROM user u
          JOIN userpossessesachievement up ON (u.pk_guID = up.pk_fk_guID)
          JOIN achievement a ON (up.pk_fk_achievementID = a.pk_achievementID)

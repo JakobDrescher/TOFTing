@@ -23,3 +23,5 @@ echo "\n\nTEST-GETALLACHIEVEMENTS";
 echo $controller->getAllAchievements();
 echo "\n\nTEST-GETACHIEVEMENT";
 echo $controller->getAchievement(1);
+echo "\n\nTEST-CREATEUSER";
+$controller->createUser("PHP-TestUser1");

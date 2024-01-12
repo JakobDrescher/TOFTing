@@ -25,7 +25,6 @@ class UserAchievementController
                     WHERE fk_achievementID = :achievementID;";
         $stmt = DB->prepare($sql);
         $stmt->bindValue(':achievementID', $id,PDO::PARAM_INT);
-        $stmt->closeCursor();
         $stmt->execute();
         $locations = array();
         while ($row2 = $stmt->fetch()) {
@@ -83,5 +82,12 @@ class UserAchievementController
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
+    }
+
+    public function createUser(string $guid){
+        $sql="INSERT INTO user VALUE (:guid);";
+        $stmt=DB->prepare($sql);
+        $stmt->bindValue(':guid',$guid);
+        $stmt->execute();
     }
 }

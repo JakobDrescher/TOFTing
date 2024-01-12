@@ -72,3 +72,5 @@ FROM user u
          JOIN achievement a ON (up.pk_fk_achievementID = a.pk_achievementID)
          JOIN department d ON (d.pk_departmentID = a.fk_departmentID)
 WHERE u.pk_guID='test5';
+
+SELECT * FROM user;

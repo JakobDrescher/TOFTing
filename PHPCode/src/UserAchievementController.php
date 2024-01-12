@@ -24,7 +24,8 @@ class UserAchievementController
                         JOIN location ON (pk_locationID=fk_locationID) 
                     WHERE fk_achievementID = :achievementID;";
         $stmt = DB->prepare($sql);
-        $stmt->bindValue(':achievementID', $id);
+        $stmt->bindValue(':achievementID', $id,PDO::PARAM_INT);
+        $stmt->closeCursor();
         $stmt->execute();
         $locations = array();
         while ($row2 = $stmt->fetch()) {
@@ -72,10 +73,10 @@ class UserAchievementController
         $result = array();
         $sql = "SELECT a.pk_achievementID, a.name AS achievementName, d.pk_departmentID, d.name AS departmentName, a.description 
                 FROM achievement a 
-                    JOIN department d on d.pk_departmentID = a.fk_departmentID;
+                    JOIN department d on d.pk_departmentID = a.fk_departmentID
                 WHERE a.pk_achievementID = :id;";
         $stmt = DB->prepare($sql);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $id,PDO::PARAM_INT);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
             $locations = $this::getLocations($id);

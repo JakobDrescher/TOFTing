@@ -33,7 +33,7 @@ class UserAchievementController
         return $locations;
     }
 
-    public function getUserAchievements(string $guid): string
+    public static function getUserAchievements(string $guid): string
     {
         $result = array();
         $sql = "SELECT a.pk_achievementID,a.name AS achievementName,d.pk_departmentID,d.name AS departmentName,a.description
@@ -46,13 +46,13 @@ class UserAchievementController
         $stmt->bindValue(':guid', $guid);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
-            $locations = $this::getLocations($row['pk_achievementID']);
+            $locations = UserAchievementController::getLocations($row['pk_achievementID']);
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
     }
 
-    public function getAllAchievements(): string
+    public static function getAllAchievements(): string
     {
         $result = array();
         $sql = "SELECT a.pk_achievementID, a.name AS achievementName, d.pk_departmentID, d.name AS departmentName, a.description 
@@ -61,13 +61,13 @@ class UserAchievementController
         $stmt = DB->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
-            $locations = $this::getLocations($row['pk_achievementID']);
+            $locations = UserAchievementController::getLocations($row['pk_achievementID']);
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
     }
 
-    public function getAchievement(int $id): string
+    public static function getAchievement(int $id): string
     {
         $result = array();
         $sql = "SELECT a.pk_achievementID, a.name AS achievementName, d.pk_departmentID, d.name AS departmentName, a.description 
@@ -78,13 +78,13 @@ class UserAchievementController
         $stmt->bindValue(':id', $id,PDO::PARAM_INT);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
-            $locations = $this::getLocations($id);
+            $locations = UserAchievementController::getLocations($id);
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
     }
 
-    public function createUser(string $guid){
+    public static function createUser(string $guid){
         $sql="INSERT INTO user VALUE (:guid);";
         $stmt=DB->prepare($sql);
         $stmt->bindValue(':guid',$guid);

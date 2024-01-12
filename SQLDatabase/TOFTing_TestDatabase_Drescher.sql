@@ -74,3 +74,5 @@ FROM user u
 WHERE u.pk_guID='test5';
 
 SELECT * FROM user;
+
+SELECT * FROM userpossessesachievement;

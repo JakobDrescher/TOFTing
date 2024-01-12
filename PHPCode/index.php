@@ -24,5 +24,7 @@ echo UserAchievementController::getAllAchievements();
 echo "\n\nTEST-GETACHIEVEMENT";
 echo UserAchievementController::getAchievement(1);
 echo "\n\nTEST-CREATEUSER";
-UserAchievementController::createUser("PHP-TestUser2");
+UserAchievementController::createUser("PHP-TestUser1");
+echo "\n\nTEST-GIVEUSERACHIEVEMENT";
+UserAchievementController::giveUserAchievement("PHP-TestUser1",1);
 */

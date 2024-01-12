@@ -17,14 +17,14 @@ DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 class UserAchievementController
 {
-    private static function getLocations(int $id):array
+    private static function getLocations(int $id): array
     {
         $sql = "SELECT pk_locationID,roomNumber,name
                     FROM achievementatlocation 
                         JOIN location ON (pk_locationID=fk_locationID) 
                     WHERE fk_achievementID = :achievementID;";
         $stmt = DB->prepare($sql);
-        $stmt->bindValue(':achievementID', $id,PDO::PARAM_INT);
+        $stmt->bindValue(':achievementID', $id, PDO::PARAM_INT);
         $stmt->execute();
         $locations = array();
         while ($row2 = $stmt->fetch()) {
@@ -75,7 +75,7 @@ class UserAchievementController
                     JOIN department d on d.pk_departmentID = a.fk_departmentID
                 WHERE a.pk_achievementID = :id;";
         $stmt = DB->prepare($sql);
-        $stmt->bindValue(':id', $id,PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
             $locations = UserAchievementController::getLocations($id);
@@ -84,10 +84,20 @@ class UserAchievementController
         return json_encode($result);
     }
 
-    public static function createUser(string $guid){
-        $sql="INSERT INTO user VALUE (:guid);";
-        $stmt=DB->prepare($sql);
-        $stmt->bindValue(':guid',$guid);
+    public static function createUser(string $guid)
+    {
+        $sql = "INSERT INTO user VALUE (:guid);";
+        $stmt = DB->prepare($sql);
+        $stmt->bindValue(':guid', $guid);
+        $stmt->execute();
+    }
+
+    public static function giveUserAchievement(string $guid, int $id)
+    {
+        $sql = "INSERT INTO userpossessesachievement VALUE (:guid,:id);";
+        $stmt = DB->prepare($sql);
+        $stmt->bindValue(':guid', $guid);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
 }

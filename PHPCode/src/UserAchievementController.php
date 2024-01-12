@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jdres\Tofting;
 
-require BASE_PATH.'/vendor/autoload.php';
+require BASE_PATH . '/vendor/autoload.php';
 
 use Jdres\Tofting\Achievement;
 use Jdres\Tofting\Department;
@@ -12,7 +12,7 @@ use Jdres\Tofting\User;
 use PDO;
 
 //localhost might need to be replaced with another hostname when running on the live server
-const DB = new PDO('mysql:host=localhost;dbname=tofting', 'root');
+const DB = new PDO('mysql:host=localhost;dbname=tofting;charset=utf8mb4', 'root');
 DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 class UserAchievementController
@@ -46,7 +46,8 @@ class UserAchievementController
         return json_encode($result);
     }
 
-    public function getAllAchievements():string{
+    public function getAllAchievements(): string
+    {
         $result = array();
         $sql = "SELECT a.pk_achievementID, a.name AS achievementName, d.pk_departmentID, d.name AS departmentName, a.description 
                 FROM achievement a 
@@ -70,14 +71,15 @@ class UserAchievementController
         return json_encode($result);
     }
 
-    public function getAchievement(int $id):string{
+    public function getAchievement(int $id): string
+    {
         $result = array();
         $sql = "SELECT a.pk_achievementID, a.name AS achievementName, d.pk_departmentID, d.name AS departmentName, a.description 
                 FROM achievement a 
                     JOIN department d on d.pk_departmentID = a.fk_departmentID;
                 WHERE a.pk_achievementID = :id;";
         $stmt = DB->prepare($sql);
-        $stmt->bindValue(':id',$id);
+        $stmt->bindValue(':id', $id);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
             $sql = "SELECT pk_locationID,roomNumber,name

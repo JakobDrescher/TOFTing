@@ -13,12 +13,13 @@ $testLocations[] = new Location("1", "PH (157)", "Physiksaal");
 $testAchievement = new Achievement(1, "Wissenschaftler", "achievement_2_TOFTing_Dragan.png", $testDepartment, $testLocations, "Höchst wissenschaftliche Wörter");
 $controller=new UserAchievementController();
 
+echo "\n\nTEST-USER";
 echo json_encode($testUser);
-echo "\n\n";
+echo "\n\nTEST-Achievement";
 echo json_encode($testAchievement);
-echo "\n\n";
+echo "\n\nTEST-GETUSERACHIEVEMENTS";
 echo $controller->getUserAchievements('test1');
-echo "\n\n";
+echo "\n\nTEST-GETALLACHIEVEMENTS";
 echo $controller->getAllAchievements();
-echo "\n\n";
+echo "\n\nTEST-GETACHIEVEMENT";
 echo $controller->getAchievement(1);

@@ -17,6 +17,22 @@ DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 class UserAchievementController
 {
+    private static function getLocations(int $id):array
+    {
+        $sql = "SELECT pk_locationID,roomNumber,name
+                    FROM achievementatlocation 
+                        JOIN location ON (pk_locationID=fk_locationID) 
+                    WHERE fk_achievementID = :achievementID;";
+        $stmt = DB->prepare($sql);
+        $stmt->bindValue(':achievementID', $id);
+        $stmt->execute();
+        $locations = array();
+        while ($row2 = $stmt->fetch()) {
+            $locations[] = new Location($row2['pk_locationID'], $row2['roomNumber'], $row2['name']);
+        }
+        return $locations;
+    }
+
     public function getUserAchievements(string $guid): string
     {
         $result = array();
@@ -30,17 +46,7 @@ class UserAchievementController
         $stmt->bindValue(':guid', $guid);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
-            $sql = "SELECT pk_locationID,roomNumber,name
-                    FROM achievementatlocation 
-                        JOIN location ON (pk_locationID=fk_locationID) 
-                    WHERE fk_achievementID = :achievementID;";
-            $stmt2 = DB->prepare($sql);
-            $stmt2->bindValue(':achievementID', $row['pk_achievementID']);
-            $stmt2->execute();
-            $locations = array();
-            while ($row2 = $stmt2->fetch()) {
-                $locations[] = new Location($row2['pk_locationID'], $row2['roomNumber'], $row2['name']);
-            }
+            $locations = $this::getLocations($row['pk_achievementID']);
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
@@ -55,17 +61,7 @@ class UserAchievementController
         $stmt = DB->prepare($sql);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
-            $sql = "SELECT pk_locationID,roomNumber,name
-                    FROM achievementatlocation 
-                        JOIN location ON (pk_locationID=fk_locationID) 
-                    WHERE fk_achievementID = :achievementID;";
-            $stmt2 = DB->prepare($sql);
-            $stmt2->bindValue(':achievementID', $row['pk_achievementID']);
-            $stmt2->execute();
-            $locations = array();
-            while ($row2 = $stmt2->fetch()) {
-                $locations[] = new Location($row2['pk_locationID'], $row2['roomNumber'], $row2['name']);
-            }
+            $locations = $this::getLocations($row['pk_achievementID']);
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
@@ -82,17 +78,7 @@ class UserAchievementController
         $stmt->bindValue(':id', $id);
         $stmt->execute();
         while ($row = $stmt->fetch()) {
-            $sql = "SELECT pk_locationID,roomNumber,name
-                    FROM achievementatlocation 
-                        JOIN location ON (pk_locationID=fk_locationID) 
-                    WHERE fk_achievementID = :achievementID;";
-            $stmt2 = DB->prepare($sql);
-            $stmt2->bindValue(':achievementID', $row['pk_achievementID']);
-            $stmt2->execute();
-            $locations = array();
-            while ($row2 = $stmt2->fetch()) {
-                $locations[] = new Location($row2['pk_locationID'], $row2['roomNumber'], $row2['name']);
-            }
+            $locations = $this::getLocations($id);
             $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);

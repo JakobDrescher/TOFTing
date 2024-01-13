@@ -9,7 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.11"
+    "html5-qrcode": "^2.3.8",
+    "qrcode-decoder": "^0.3.3",
+    "qrcodejs": "^1.0.0",
+    "vue": "^3.3.11",
+    "vue-barcode-reader": "^1.0.3",
+    "vue-qrcode-reader": "^5.5.1",
+    "vue3-qrcode-reader": "^0.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

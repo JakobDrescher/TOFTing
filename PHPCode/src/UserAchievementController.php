@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Jdres\Tofting;
 
-require BASE_PATH . '/vendor/autoload.php';
+const BASE_PATH = __DIR__ . "/../";
+require_once BASE_PATH . '/vendor/autoload.php';
 
 use Jdres\Tofting\Achievement;
 use Jdres\Tofting\Department;
@@ -47,7 +48,7 @@ class UserAchievementController
         $stmt->execute();
         while ($row = $stmt->fetch()) {
             $locations = UserAchievementController::getLocations($row['pk_achievementID']);
-            $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
+            $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
     }
@@ -62,7 +63,7 @@ class UserAchievementController
         $stmt->execute();
         while ($row = $stmt->fetch()) {
             $locations = UserAchievementController::getLocations($row['pk_achievementID']);
-            $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
+            $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
     }
@@ -79,7 +80,7 @@ class UserAchievementController
         $stmt->execute();
         while ($row = $stmt->fetch()) {
             $locations = UserAchievementController::getLocations($id);
-            $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], "test", new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
+            $result[] = new Achievement($row['pk_achievementID'], $row['achievementName'], new Department($row['pk_departmentID'], $row['departmentName']), $locations, $row['description']);
         }
         return json_encode($result);
     }

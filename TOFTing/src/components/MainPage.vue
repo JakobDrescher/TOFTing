@@ -136,6 +136,7 @@ export default {
 .bgi {
   background-image: url('@/assets/Hintergrund.png');
   background-size: cover;
-  background-repeat: repeat;
+  background-position: center center;
+  background-attachment: fixed;
 }
 </style>

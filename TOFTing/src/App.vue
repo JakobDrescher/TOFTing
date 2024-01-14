@@ -1,6 +1,5 @@
 <script setup>
 import MainPage from '@/components/MainPage.vue';
-import A from '@'
 </script>
 
 <template>

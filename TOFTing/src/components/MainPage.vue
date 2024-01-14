@@ -17,18 +17,13 @@
         <img src="@/assets/Kamera.png" class="max-w-full h-auto" alt="Camera Icon" />
       </div>
     </header>
-    <div
-      class="bg-[#333333] h-[7%] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl flex items-center justify-center"
-      :style="{ border: '0.35rem solid #CC0000' }"
-    >
+    <div class="bg-[#333333] h-[7%] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl flex items-center justify-center"
+      :style="{ border: '0.35rem solid #CC0000' }">
       <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">
         Finde die Errungenschaften
       </h2>
     </div>
-    <div
-      class="bg-[#333333] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl"
-      :style="{ border: '0.35rem solid #CC0000' }"
-    >
+    <div class="bg-[#333333] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl" :style="{ border: '0.35rem solid #CC0000' }">
       <h1 class="text-[#CCCCCC] font-alegreya-sans-sc font-extrabold text-center mt-[3%] mb-[3%] text-4xl">
         Errungenschaften
       </h1>
@@ -45,9 +40,7 @@
         <p class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-xxs ml-4">@COPYRIGHT - IMPRESSUM</p>
       </div>
       <div class="flex-1 flex items-center justify-center">
-        <a
-          href="https://linktr.ee/tofting?utm_source=linktree_profile_share&ltsid=59e713d6-cc5d-4467-ac43-1b5a8384219f"
-        >
+        <a href="https://linktr.ee/tofting?utm_source=linktree_profile_share&ltsid=59e713d6-cc5d-4467-ac43-1b5a8384219f">
           <img src="@/assets/tofting.png" class="w-[4em] h-[4em]" />
         </a>
       </div>
@@ -137,12 +130,12 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@400;700;800&display=swap');
 
 .font-alegreya-sans-sc {
-    font-family: 'Alegreya Sans SC', sans-serif;
+  font-family: 'Alegreya Sans SC', sans-serif;
 }
 
 .bgi {
-    background-image: url('@/assets/Hintergrund.png');
-    background-size: cover;
-    background-repeat: repeat;
+  background-image: url('@/assets/Hintergrund.png');
+  background-size: cover;
+  background-repeat: repeat;
 }
 </style>

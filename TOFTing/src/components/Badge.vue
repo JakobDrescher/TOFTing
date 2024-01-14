@@ -6,7 +6,6 @@
 
 <script setup>
 import { computed, defineProps } from 'vue';
-import a1_ul from '../assets/achievements/unlocked/a1_ul.png';
 const { idBadge, unlockedBadgeIds } = defineProps(['idBadge', 'unlockedBadgeIds']);
 
 const achievementPath = computed(() => {

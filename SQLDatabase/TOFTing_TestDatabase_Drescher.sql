@@ -1,4 +1,4 @@
-USE tofting;
+USE u234111db1;
 
 -- Insert Test Data
 INSERT INTO user
@@ -34,7 +34,7 @@ VALUES ('Zauberlehrling', 1,
        ('Kabel-Action', 2, 'Projekte von der FS mit NWT Focus'),
        ('The End?', 2, '	Enter a stronghold End Portal activated with all twelve eyes of ender.');
 
-INSERT INTO achievementatlocation (fk_achievementID, fk_locationID)
+INSERT INTO achievementAtLocation (fk_achievementID, fk_locationID)
 VALUES (1, 7),
        (2, 3),
        (3, 1),
@@ -44,7 +44,7 @@ VALUES (1, 7),
        (6, 4),
        (7, 5);
 
-INSERT INTO userpossessesachievement
+INSERT INTO userPossessesAchievement
 VALUES ('test1', 1),
        ('test1', 2),
        ('test1', 3),
@@ -68,11 +68,11 @@ WHERE fk_departmentID = 1;
 
 SELECT a.pk_achievementID,a.name,d.pk_departmentID,d.name,a.description
 FROM user u
-         JOIN userpossessesachievement up ON (u.pk_guID = up.pk_fk_guID)
+         JOIN userPossessesAchievement up ON (u.pk_guID = up.pk_fk_guID)
          JOIN achievement a ON (up.pk_fk_achievementID = a.pk_achievementID)
          JOIN department d ON (d.pk_departmentID = a.fk_departmentID)
 WHERE u.pk_guID='test5';
 
 SELECT * FROM user;
 
-SELECT * FROM userpossessesachievement;
+SELECT * FROM userPossessesAchievement;

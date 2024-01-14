@@ -73,7 +73,7 @@ export default {
   methods: {
     async fetchAchievementsData() {
       try {
-        const response = await fetch('https://virtserver.swaggerhub.com/0151/TOFTing2/2.0.0/all');
+        const response = await fetch('http://api.tofting.at/');
         if (!response.ok) {
           throw new Error('Failed to fetch achievements data');
         }

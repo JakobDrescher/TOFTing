@@ -44,7 +44,7 @@ export default {
         }
     },
     mounted() {
-        fetch('https://virtserver.swaggerhub.com/0151/TOFTing2/2.0.0/all')
+        fetch('api.tofting.at/?achievementID=1')
         .then(res => res.json())
         .then(data => this.achievement = data[0])
         .catch(err => console.log(err.message))

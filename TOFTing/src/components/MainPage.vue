@@ -49,12 +49,14 @@
           <img src="@/assets/Alternative Logo.svg" class="w-[6em] h-[6em]" />
         </a>
       </div>
+      <button @click="createUser">Create User</button>
     </footer>
   </div>
 </template>
 
 <script>
 import Badge from '@/components/Badge.vue';
+
 
 export default {
   components: {
@@ -122,8 +124,28 @@ export default {
       // Call generateBadges to update the badges array
       this.generateBadges();
     },
-  },
-};
+    createUser() {
+  fetch('http://api.tofting.at/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ guid: 'JS-TestUser3' }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to create user');
+    }
+    // Handle successful response if needed
+    console.log('User created successfully');
+  })
+  .catch(error => {
+    console.error('Error creating user:', error);
+    // Handle error or provide user feedback
+  });
+},
+}
+}
 </script>
 
 <style>

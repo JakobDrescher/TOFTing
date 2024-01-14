@@ -1,30 +1,21 @@
 <?php
+header('Content-Type: text/json');
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Jdres\Tofting\User;
-use Jdres\Tofting\Department;
-use Jdres\Tofting\Location;
-use Jdres\Tofting\Achievement;
 use Jdres\Tofting\UserAchievementController;
 
-$testUser = new User("testUser");
-$testDepartment = new Department(1, "Informationstechnologie");
-$testLocations[] = new Location("1", "PH (157)", "Physiksaal");
-$testAchievement = new Achievement(1, "Wissenschaftler", "achievement_2_TOFTing_Dragan.png", $testDepartment, $testLocations, "Höchst wissenschaftliche Wörter");
+$postData = json_decode(file_get_contents('php://input'), true);
 
-/*
-echo "\n\nTEST-USER";
-echo json_encode($testUser);
-echo "\n\nTEST-Achievement";
-echo json_encode($testAchievement);
-echo "\n\nTEST-GETUSERACHIEVEMENTS";
-echo UserAchievementController::getUserAchievements('test1');
-echo "\n\nTEST-GETALLACHIEVEMENTS";
-echo UserAchievementController::getAllAchievements();
-echo "\n\nTEST-GETACHIEVEMENT";
-echo UserAchievementController::getAchievement(1);
-echo "\n\nTEST-CREATEUSER";
-UserAchievementController::createUser("PHP-TestUser1");
-echo "\n\nTEST-GIVEUSERACHIEVEMENT";
-UserAchievementController::giveUserAchievement("PHP-TestUser1",1);
-*/
+if (isset($_GET['guid'])) {
+    echo UserAchievementController::getUserAchievements($_GET['guid']);
+} elseif (isset($_GET['achievementID'])) {
+    echo UserAchievementController::getAchievement($_GET['achievementID']);
+} elseif (isset($postData['guid'])) {
+    if (isset($postData['achievementID'])) {
+        UserAchievementController::giveUserAchievement($postData['guid'], $postData['achievementID']);
+    } else {
+        UserAchievementController::createUser($postData['guid']);
+    }
+} else {
+    echo UserAchievementController::getAllAchievements();
+}

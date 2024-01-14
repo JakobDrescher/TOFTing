@@ -13,7 +13,7 @@ use Jdres\Tofting\User;
 use PDO;
 
 //localhost might need to be replaced with another hostname when running on the live server
-const DB = new PDO('mysql:host=localhost;dbname=tofting;charset=utf8mb4', 'root');
+const DB = new PDO('mysql:host=e149819-mysql.services.easyname.eu:3307;dbname=u234111db1;charset=utf8mb4', 'u234111db1','T0ft1NG');
 DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 class UserAchievementController
@@ -21,7 +21,7 @@ class UserAchievementController
     private static function getLocations(int $id): array
     {
         $sql = "SELECT pk_locationID,roomNumber,name
-                    FROM achievementatlocation 
+                    FROM achievementAtLocation 
                         JOIN location ON (pk_locationID=fk_locationID) 
                     WHERE fk_achievementID = :achievementID;";
         $stmt = DB->prepare($sql);
@@ -39,7 +39,7 @@ class UserAchievementController
         $result = array();
         $sql = "SELECT a.pk_achievementID,a.name AS achievementName,d.pk_departmentID,d.name AS departmentName,a.description
                 FROM user u 
-                    JOIN userpossessesachievement up ON (u.pk_guID = up.pk_fk_guID) 
+                    JOIN userPossessesAchievement up ON (u.pk_guID = up.pk_fk_guID) 
                     JOIN achievement a ON (up.pk_fk_achievementID = a.pk_achievementID) 
                     LEFT JOIN department d ON (d.pk_departmentID = a.fk_departmentID)  
                 WHERE u.pk_guID= :guid;";
@@ -95,7 +95,7 @@ class UserAchievementController
 
     public static function giveUserAchievement(string $guid, int $id)
     {
-        $sql = "INSERT INTO userpossessesachievement VALUE (:guid,:id);";
+        $sql = "INSERT INTO userPossessesAchievement VALUE (:guid,:id);";
         $stmt = DB->prepare($sql);
         $stmt->bindValue(':guid', $guid);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);

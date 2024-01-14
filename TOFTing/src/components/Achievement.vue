@@ -1,7 +1,7 @@
 <template>
     <div class="flex h-screen items-center max-w-[100%]">
         <div class="flex flex-wrap flex-col grow mx-[5%] rounded-3xl border-2 border-[#CC0000] bg-[#333333]">
-            <img class="mt-[-44pt] self-center" src="../assets/Masköttchen_looking_over_TOFTing_Dragan.png" width="200vw">
+            <img class="mt-[-44pt] self-center" src="../assets/mascot/mascot_looking_over.png" width="200vw">
             <div class="flex justify-start items-center m-[5%]">
                 <img v-if="achievement" :src="`/src/assets/achievements/unlocked/a${achievement.id}_ul.png`" width="100vw">
                 <div v-if="achievement" class="text-[30pt] ml-[5%]">{{ achievement.name }}</div>

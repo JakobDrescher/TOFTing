@@ -1,10 +1,9 @@
 <script setup>
-import Achievement from './components/Achievement.vue'
-
+import MainPage from '@/components/MainPage.vue';
 </script>
 
 <template>
-    <Achievement/>
+    <MainPage></MainPage>
 </template>
 
 <style scoped>

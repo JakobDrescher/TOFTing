@@ -3,7 +3,12 @@
   <div class="bg-cover bg-center h-screen min-h-screen">
     <header class="bg-[#333333] h-[10%] flex items-center">
       <!-- First Segment (Empty) -->
-      <div class="flex-1 mr-5"></div>
+      <div class="flex-1 mr-5">
+        <button @click="addRandomAchievement"
+          class="bg-[#FFFFFF] text-[#333333] py-[2%] rounded-md border-2 border-[#CC0000]">
+          Add Random Achievement
+        </button>
+      </div>
 
       <!-- Second Segment (White Box with Logo) -->
       <div class="flex-1 h-full flex items-center justify-center">
@@ -159,6 +164,39 @@ export default {
           console.error('Error creating user:', error);
           // Handle error or provide user feedback
         });
+    },
+    addRandomAchievement() {
+      const randomID = Math.floor(Math.random() * (16 - 2 + 1)) + 2; // Random number from 2 to 16
+      this.addAchievement(randomID);
+    },
+    async addAchievement(scannedID) {
+      let response;  // Define the response variable outside the try block
+      try {
+        response = await fetch('http://api.tofting.at/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            guid: this.generatedGuid,
+            achievementID: scannedID,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to add achievement. Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Added achievement:', data);
+        this.updateBadges();
+      } catch (error) {
+        console.error('Error adding achievement:', error);
+        if (error instanceof SyntaxError) {
+          // Log the response text if available
+          console.error('Response Text:', await response?.text());
+        }
+      }
     },
   },
 };

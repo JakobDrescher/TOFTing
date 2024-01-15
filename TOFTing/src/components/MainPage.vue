@@ -49,13 +49,13 @@
           <img src="@/assets/Alternative Logo.svg" class="w-[6em] h-[6em]" />
         </a>
       </div>
-      <button @click="createUser">Create User</button>
     </footer>
   </div>
 </template>
 
 <script>
 import Badge from '@/components/Badge.vue';
+import { v4 as uuidv4 } from 'uuid';
 
 
 export default {
@@ -67,10 +67,28 @@ export default {
       allAchievements: [],
       unlockedBadgeIds: [],
       badges: [],
+      generatedGuid: '',
     };
   },
   created() {
     this.fetchAchievementsData();
+  },
+  mounted() {
+    // Versuchen Sie, die GUID aus dem localStorage abzurufen
+    const cachedGuid = localStorage.getItem('myCachedGuid');
+
+    if (cachedGuid) {
+      // Wenn die GUID im localStorage vorhanden ist, verwenden Sie diese
+      this.generatedGuid = cachedGuid;
+    } else {
+      // Wenn die GUID nicht im localStorage vorhanden ist, erstellen Sie eine neue
+      this.generatedGuid = uuidv4();
+
+      // Speichern Sie die GUID im localStorage für zukünftige Verwendung
+      localStorage.setItem('myCachedGuid', this.generatedGuid);
+
+      this.createUser(this.generatedGuid);
+    }
   },
   methods: {
     async fetchAchievementsData() {
@@ -124,27 +142,27 @@ export default {
       // Call generateBadges to update the badges array
       this.generateBadges();
     },
-    createUser() {
-  fetch('http://api.tofting.at/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+    createUser(setGuid) {
+      fetch('http://api.tofting.at/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/json',
+        },
+        body: JSON.stringify({ guid: setGuid }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to create user');
+          }
+          // Handle successful response if needed
+          console.log('User created successfully');
+        })
+        .catch(error => {
+          console.error('Error creating user:', error);
+          // Handle error or provide user feedback
+        });
     },
-    body: JSON.stringify({ guid: 'JS-TestUser3' }),
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Failed to create user');
-    }
-    // Handle successful response if needed
-    console.log('User created successfully');
-  })
-  .catch(error => {
-    console.error('Error creating user:', error);
-    // Handle error or provide user feedback
-  });
-},
-}
+  }
 }
 </script>
 

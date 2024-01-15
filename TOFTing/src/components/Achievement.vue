@@ -15,7 +15,8 @@
             </div>
             <div class="flex flex-col mx-[20%] text-[#CCCCCC]">
                 <div class="text-[25px]">Standort</div>
-                <div v-if="achievement" v-for="(location, index) in achievement.location" :key="index" class="text-[18px]">{{ location.name }} [{{ location.roomNumber }}]</div>
+                <div v-if="achievement" v-for="(location, index) in achievement.location" :key="index" class="text-[18px]">
+                    {{ location.name }} [{{ location.roomNumber }}]</div>
             </div>
             <div class="flex mt-[3vw] mb-[5vw] flex-col items-center">
                 <hr width="70%">
@@ -45,16 +46,16 @@ export default {
     },
     async mounted() {
         try {
-        const response = await fetch('http://api.tofting.at/?achievementID=3');
-        if (!response.ok) {
-          throw new Error('Failed to fetch achievements data');
-        }
+            const response = await fetch('http://api.tofting.at/?achievementID=3');
+            if (!response.ok) {
+                throw new Error('Failed to fetch achievements data');
+            }
 
-        const data = await response.json();
-        this.achievement = data[0];
-      } catch (error) {
-        console.error('Error fetching achievement data:', error);
-      }
+            const data = await response.json();
+            this.achievement = data[0];
+        } catch (error) {
+            console.error('Error fetching achievement data:', error);
+        }
     }
 }
 </script>

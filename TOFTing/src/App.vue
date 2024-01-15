@@ -4,9 +4,8 @@ import Achievement from './components/Achievement.vue';
 </script>
 
 <template>
+    <Achievement></Achievement>
     <MainPage></MainPage>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

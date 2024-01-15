@@ -28,22 +28,34 @@
             <div class="flex mt-[3vw] mb-[5vw] flex-col items-center">
                 <hr width="70%">
             </div>
-            <button
+            <button @click="redirectToMainPage"
                 class="mx-[30%] mt-[5%] mb-[10%] bg-[#FFFFFF] text-[#333333] py-[2%] rounded-md border-2 border-[#CC0000]">
                 Hauptseite
             </button>
         </div>
     </div>
-
 </template>
 
 <script>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+
 export default {
     data() {
         return {
-            achievement: null
-        }
+            achievement: null,
+        };
+    },
+    setup() {
+        const router = useRouter();
+
+        const redirectToMainPage = () => {
+            router.push({ name: 'home' }); // Use the correct name for your MainPage route
+        };
+
+        return {
+            redirectToMainPage,
+        };
     },
     async mounted() {
         try {

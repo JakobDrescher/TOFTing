@@ -1,6 +1,6 @@
 
 <template>
-  <div class="bg-cover bg-center h-screen bgi min-h-screen">
+  <div class="bg-cover bg-center h-screen min-h-screen">
     <header class="bg-[#333333] h-[10%] flex items-center">
       <!-- First Segment (Empty) -->
       <div class="flex-1 mr-5"></div>

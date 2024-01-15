@@ -1,73 +1,64 @@
 <template>
     <div class="flex h-screen items-center max-w-[100%]">
         <div class="flex flex-wrap flex-col grow mx-[5%] rounded-3xl border-2 border-[#CC0000] bg-[#333333]">
-            <img v-if="achievement" class="mt-[-44pt] self-center" :src="achievement.icon" width="200vw">
-            <div class="flex justify-start items-center m-[5%]" v-if="achievement">
-                <img :src="achievement.icon" width="100vw">
-                <div class="text-[30pt] ml-[5%]">{{ achievement.name }}</div>
+            <img class="mt-[-44pt] self-center" src="../assets/mascot/mascot_looking_over.png" width="200vw">
+            <div class="flex justify-start items-center m-[5%]">
+                <img v-if="achievement" :src="`/src/assets/achievements/unlocked/a${achievement.id}_ul.png`" width="100vw">
+                <div v-if="achievement" class="text-[30pt] ml-[5%]">{{ achievement.name }}</div>
             </div>
-            <div class="flex flex-col mx-[20%] text-[#CCCCCC]" v-if="achievement && achievement.department">
+            <div class="flex flex-col mx-[20%] text-[#CCCCCC]">
                 <div class="text-[25px]">Abteilung</div>
-                <div class="text-[18px]">
-                    {{ Array.isArray(achievement.department)
-                        ? achievement.department.map((dept) => dept.name).join(', ')
-                        : achievement.department.name }}
-                </div>
+                <div v-if="achievement" class="text-[18px]">{{ achievement.department.name }}</div>
             </div>
-            <div class="flex mt-[3vw] mb-[5vw] flex-col items-center" v-if="achievement">
+            <div class="flex mt-[3vw] mb-[5vw] flex-col items-center">
                 <hr width="70%">
             </div>
-            <div class="flex flex-col flex-wrap mx-[20%] text-[#CCCCCC]" v-if="achievement">
+            <div class="flex flex-col mx-[20%] text-[#CCCCCC]">
+                <div class="text-[25px]">Standort</div>
+                <div v-if="achievement" v-for="(location, index) in achievement.location" :key="index" class="text-[18px]">
+                    {{ location.name }} [{{ location.roomNumber }}]</div>
+            </div>
+            <div class="flex mt-[3vw] mb-[5vw] flex-col items-center">
+                <hr width="70%">
+            </div>
+            <div class="flex flex-col flex-wrap mx-[20%] text-[#CCCCCC]">
                 <div class="text-[25px]">Beschreibung</div>
-                <div class="text-[18px] break-words">{{ achievement.description }}</div>
+                <div v-if="achievement" class="text-[18px] break-words">{{ achievement.description }}</div>
             </div>
-            <div class="flex mt-[3vw] mb-[5vw] flex-col items-center" v-if="achievement">
+            <div class="flex mt-[3vw] mb-[5vw] flex-col items-center">
                 <hr width="70%">
             </div>
-            <button @click="redirectToMainPage"
+            <button
                 class="mx-[30%] mt-[5%] mb-[10%] bg-[#FFFFFF] text-[#333333] py-[2%] rounded-md border-2 border-[#CC0000]">
                 Hauptseite
             </button>
         </div>
     </div>
+
 </template>
-  
 
 <script>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-
+import { ref } from 'vue'
 export default {
-    props: {
-        achievementId: {
-            type: String,
-            required: true,
-        },
-    },
-    setup(props) {
-        const router = useRouter();
-        const achievement = ref(null);
-
-        const redirectToMainPage = () => {
-            router.push({ name: 'main' });
-        };
-
-        onMounted(async () => {
-            try {
-                const response = await fetch(`http://api.tofting.at/?achievementID=${props.achievementId}`);
-                const data = await response.json();
-                achievement.value = data;
-            } catch (error) {
-                console.error(error.message);
-            }
-        });
-
+    data() {
         return {
-            achievement,
-            redirectToMainPage,
-        };
+            achievement: null
+        }
     },
-};
+    async mounted() {
+        try {
+            const response = await fetch(`http://api.tofting.at/?achievementID=${this.$route.params.achievementId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch achievements data');
+            }
+
+            const data = await response.json();
+            this.achievement = data[0];
+        } catch (error) {
+            console.error('Error fetching achievement data:', error);
+        }
+    }
+}
 </script>
 
 <style>

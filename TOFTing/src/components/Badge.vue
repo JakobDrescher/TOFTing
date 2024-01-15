@@ -19,7 +19,7 @@ const achievementPath = computed(() => {
 
 const navigateToAchievement = () => {
   if (unlockedBadgeIds.includes(idBadge)) {
-    // Using the router from the context
+    // Dynamically set achievementID based on the badge clicked
     context.proxy.$router.push({ name: 'achievement', params: { achievementId: idBadge } });
   }
 };

@@ -1,9 +1,8 @@
-
 <template>
   <div class="bg-cover bg-center h-screen min-h-screen">
     <header class="bg-[#333333] h-[10%] flex items-center">
       <!-- First Segment (Empty) -->
-      <div class="flex-1 mr-5">
+      <div class="flex-1 mx-5">
         <button @click="addRandomAchievement"
           class="bg-[#FFFFFF] text-[#333333] py-[2%] rounded-md border-2 border-[#CC0000]">
           Add Random Achievement
@@ -76,6 +75,21 @@ export default {
   },
   created() {
     this.fetchAchievementsData();
+
+    // Check for achievement ID in the URL when the component is created
+    this.checkForAchievementId();
+
+    // React to route changes
+    this.$router.afterEach((to, from) => {
+      if (to.name === 'Achievement') {
+        // Extract the achievementId from the route params
+        const achievementId = parseInt(to.params.achievementId, 10);
+        if (!isNaN(achievementId)) {
+          // Call addAchievement with the extracted achievementId
+          this.addAchievement(achievementId);
+        }
+      }
+    });
   },
   mounted() {
     // Versuchen Sie, die GUID aus dem localStorage abzurufen
@@ -94,13 +108,25 @@ export default {
     }
   },
   methods: {
+    checkForAchievementId() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const achievementIdParam = urlParams.get('achievementID');
+
+      if (achievementIdParam !== null) {
+        const achievementId = parseInt(achievementIdParam, 10);
+        if (!isNaN(achievementId)) {
+          // Call addAchievement with the extracted achievementId
+          this.addAchievement(achievementId);
+        }
+      }
+    },
+
     async fetchAchievementsData() {
       try {
         const response = await fetch('http://api.tofting.at/?guid=' + localStorage.getItem('myCachedGuid'));
         if (!response.ok) {
           throw new Error('Failed to fetch achievements data');
         }
-
         const data = await response.json();
         this.allAchievements = data;
         this.extractUnlockedBadgeIds();
@@ -108,6 +134,7 @@ export default {
         console.error('Error fetching achievement data:', error);
       }
     },
+
     extractUnlockedBadgeIds() {
       // Ensure that unlockedBadgeIds is a regular array
       this.unlockedBadgeIds = this.allAchievements
@@ -123,6 +150,7 @@ export default {
       // Generate the badges array
       this.generateBadges();
     },
+
     generateBadges() {
       this.badges = [];
       for (let index = 1; index <= 16; index++) {
@@ -140,11 +168,7 @@ export default {
         console.log(`Badge ${badge.id} path: ${path}`);
       });
     },
-    // Add a method to update badges when new achievements are added
-    updateBadges() {
-      // Call generateBadges to update the badges array
-      this.generateBadges();
-    },
+
     createUser(setGuid) {
       fetch('http://api.tofting.at/', {
         method: 'POST',
@@ -165,14 +189,20 @@ export default {
           // Handle error or provide user feedback
         });
     },
+
     addRandomAchievement() {
-      const randomID = Math.floor(Math.random() * (16 - 2 + 1)) + 2; // Random number from 2 to 16
+      const randomID = Math.floor(Math.random() * (16)); // Random number from 1 to 16
       this.addAchievement(randomID);
     },
+
     async addAchievement(scannedID) {
-      let response;  // Define the response variable outside the try block
       try {
-        response = await fetch('http://api.tofting.at/', {
+        console.log('Request Body:', JSON.stringify({
+          guid: this.generatedGuid,
+          achievementID: scannedID,
+        }));
+
+        const response = await fetch('http://api.tofting.at/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -187,16 +217,16 @@ export default {
           throw new Error(`Failed to add achievement. Status: ${response.status}`);
         }
 
-        const data = await response.json();
-        console.log('Added achievement:', data);
-        this.updateBadges();
+        // No need to read the response body if not used
+        console.log('Added achievement successfully');
+        await this.fetchAchievementsData();
       } catch (error) {
         console.error('Error adding achievement:', error);
-        if (error instanceof SyntaxError) {
-          // Log the response text if available
-          console.error('Response Text:', await response?.text());
-        }
       }
+    },
+    async updateBadges() {
+      // Call generateBadges to update the badges array
+      await this.generateBadges();
     },
   },
 };

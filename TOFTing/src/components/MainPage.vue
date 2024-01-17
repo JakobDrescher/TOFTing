@@ -71,6 +71,7 @@ export default {
       unlockedBadgeIds: [],
       badges: [],
       generatedGuid: '',
+      saveInCache: true,
     };
   },
   mounted() {
@@ -90,24 +91,49 @@ export default {
       this.createUser(this.generatedGuid);
     }
 
-    this.fetchAchievementsData();
+    this.fetchCachedAchievementIds(); // Fetch cached achievement IDs when the component is mounted
 
-    // Check for achievement ID in the URL when the component is created
-    this.checkForAchievementId();
+  // Always fetch achievements data when the component is mounted
+  this.fetchAchievementsData();
 
-    // React to route changes
-    this.$router.afterEach((to, from) => {
-      if (to.name === 'Achievement') {
-        // Extract the achievementId from the route params
-        const achievementId = parseInt(to.params.achievementId, 10);
-        if (!isNaN(achievementId)) {
-          // Call addAchievement with the extracted achievementId
-          this.addAchievement(achievementId);
+  // Check for achievement ID in the URL when the component is created
+  this.checkForAchievementId();
+
+  // React to route changes
+  this.$router.afterEach((to, from) => {
+    if (to.name === 'Achievement') {
+      // Extract the achievementId from the route params
+      const achievementId = parseInt(to.params.achievementId, 10);
+      if (!isNaN(achievementId)) {
+        // Call addAchievement with the extracted achievementId
+        this.addAchievement(achievementId);
+
+        // Save the achievementId in the cache if enabled
+        if (this.saveInCache) {
+          this.unlockedBadgeIds.push(achievementId);
+          this.saveCachedAchievementIds();
         }
       }
-    });
+    }
+  });
   },
   methods: {
+    fetchCachedAchievementIds() {
+      if (this.saveInCache) {
+        const cachedIds = localStorage.getItem('cachedAchievementIds');
+        if (cachedIds) {
+          this.unlockedBadgeIds = JSON.parse(cachedIds);
+          console.log('Fetched cached achievement IDs:', this.unlockedBadgeIds);
+        }
+      }
+    },
+
+    saveCachedAchievementIds() {
+      if (this.saveInCache) {
+        localStorage.setItem('cachedAchievementIds', JSON.stringify(this.unlockedBadgeIds));
+      }
+    },
+
     checkForAchievementId() {
       const urlParams = new URLSearchParams(window.location.search);
       const achievementIdParam = urlParams.get('achievementID');
@@ -138,22 +164,6 @@ export default {
       }
     },
 
-    extractUnlockedBadgeIds() {
-      // Ensure that unlockedBadgeIds is a regular array
-      this.unlockedBadgeIds = this.allAchievements
-        .filter((achievement) => achievement.id !== undefined)
-        .map((achievement) => parseInt(achievement.id, 10));
-
-      // Convert the array to a regular JavaScript array
-      this.unlockedBadgeIds = Array.from(this.unlockedBadgeIds);
-
-      // Log the extracted achievement IDs
-      console.log('Extracted Achievement IDs:', this.unlockedBadgeIds);
-
-      // Generate the badges array
-      this.generateBadges();
-    },
-
     generateBadges() {
       this.badges = [];
       for (let index = 1; index <= 16; index++) {
@@ -172,6 +182,23 @@ export default {
       });
     },
 
+    extractUnlockedBadgeIds() {
+      // Ensure that unlockedBadgeIds is a regular array
+      this.unlockedBadgeIds = this.allAchievements
+        .filter((achievement) => achievement.id !== undefined)
+        .map((achievement) => parseInt(achievement.id, 10));
+
+      // Convert the array to a regular JavaScript array
+      this.unlockedBadgeIds = Array.from(this.unlockedBadgeIds);
+
+      // Log the extracted achievement IDs
+      console.log('Extracted Achievement IDs:', this.unlockedBadgeIds);
+
+      // Generate the badges array
+      this.generateBadges();
+    },
+
+    
     createUser(setGuid) {
       fetch('http://api.tofting.at/', {
         method: 'POST',
@@ -230,8 +257,6 @@ export default {
       }
     },
     async updateBadges() {
-      // Call generateBadges to update the badges array
-      //await this.fetchAchievementsData();
       this.generateBadges();
     },
   },

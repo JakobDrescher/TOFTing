@@ -1,0 +1,17 @@
+[
+    {
+      "id": 1,
+      "name": "Willkommen",
+      "icon": "C:\\pictures\\icon1",
+      "department": {
+        "id": 1,
+        "name": "MEDT"
+      },
+      "location": {
+        "id": 1,
+        "roomNumber": "276",
+        "name": "4AI"
+      },
+      "description": "Das ist eine Errungenschaft"
+    }
+  ]

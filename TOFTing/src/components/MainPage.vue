@@ -19,12 +19,13 @@
       <h1 class="text-[#CCCCCC] font-alegreya-sans-sc font-extrabold text-center mt-[3%] mb-[3%] text-[9vw]">
         Errungenschaften
       </h1>
-      <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">16/16</h2>
+      <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">
+        {{ unlockedBadgeIds.length }}/16</h2>
 
       <!-- Flex container for images -->
       <div class="flex flex-wrap justify-center gap-4 p-4">
-        <div v-for="badge in badges"class="w-[45%]">
-        <Badge :key="badge.id" :idBadge="badge.id" :unlockedBadgeIds="unlockedBadgeIds"/>
+        <div v-for="badge in badges" class="w-[45%]">
+          <Badge :key="badge.id" :idBadge="badge.id" :isLocked="badge.locked"/>
         </div>
       </div>
     </div>
@@ -63,7 +64,7 @@ export default {
       generatedGuid: '',
     };
   },
-  mounted() {
+  mounted: function () {
     // Versuchen Sie, die GUID aus dem localStorage abzurufen
     const cachedGuid = localStorage.getItem('myCachedGuid');
 
@@ -78,9 +79,7 @@ export default {
       localStorage.setItem('myCachedGuid', this.generatedGuid);
       this.createUser(this.generatedGuid);
     }
-
     // Check for achievement ID in the URL when the component is created
-    this.checkForAchievementId();
 
     this.fetchAchievementsData();
 
@@ -97,20 +96,21 @@ export default {
     });
   },
   methods: {
-    checkForAchievementId() {
+    async checkForAchievementId() {
       const urlParams = new URLSearchParams(window.location.search);
       const achievementIdParam = urlParams.get('achievementID');
 
       if (achievementIdParam !== null) {
         const achievementId = parseInt(achievementIdParam, 10);
         if (!isNaN(achievementId)) {
-          // Call addAchievement with the extracted achievementId
-          this.addAchievement(achievementId);
+          await this.addAchievement(achievementId);
         }
+        console.log('AchievementID ist:' + achievementId);
       }
     },
 
     async fetchAchievementsData() {
+      await this.checkForAchievementId();
       try {
         const response = await fetch('http://api.tofting.at/?guid=' + localStorage.getItem('myCachedGuid'), {
           headers: {
@@ -123,10 +123,11 @@ export default {
         const data = await response.json();
         this.allAchievements = data;
 
-        this.extractUnlockedBadgeIds();
+        await this.extractUnlockedBadgeIds();
       } catch (error) {
         console.error('Error fetching achievement data:', error);
       }
+      console.log('achievements fetched');
     },
 
     extractUnlockedBadgeIds() {
@@ -148,19 +149,14 @@ export default {
     generateBadges() {
       this.badges = [];
       for (let index = 1; index <= 16; index++) {
-        this.badges.push({id: index});
+        const isUnlocked = this.unlockedBadgeIds.includes(index);
+        this.badges.push({id: index, locked: !isUnlocked});
       }
 
+      this.badges = this.badges.sort((x, y) => Number(x.locked) - Number(y.locked));
+      console.log(JSON.stringify(this.badges));
       // Log the generated badges
       console.log('Generated Badges:', this.badges);
-
-      // Log the paths for each badge based on its unlocked status
-      this.badges.forEach((badge) => {
-        const isUnlocked = this.unlockedBadgeIds.includes(badge.id);
-        const path = `/src/assets/achievements/${isUnlocked ? 'unlocked' : 'locked'}/a${badge.id}_${isUnlocked ? 'ul' : 'l'}.png`;
-
-        console.log(`Badge ${badge.id} path: ${path}`);
-      });
     },
 
     createUser(setGuid) {

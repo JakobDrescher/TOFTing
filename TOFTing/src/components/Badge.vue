@@ -7,11 +7,11 @@
 <script setup>
 import { computed, defineProps, ref, getCurrentInstance } from 'vue';
 
-const { idBadge, unlockedBadgeIds } = defineProps(['idBadge', 'unlockedBadgeIds']);
+const { idBadge, isLocked } = defineProps(['idBadge', 'isLocked']);
 const context = getCurrentInstance();
 
 const achievementPath = computed(() => {
-  const isUnlocked = unlockedBadgeIds.includes(idBadge);
+  const isUnlocked = !isLocked;
   const path = `/src/assets/achievements/${isUnlocked ? 'unlocked' : 'locked'}/a${idBadge}_${isUnlocked ? 'ul' : 'l'}.png`;
 
   return path;

@@ -1,8 +1,6 @@
 <template>
   <div class="bg-cover bg-center h-screen min-h-screen">
     <header class="bg-[#333333] h-[10%] flex items-center">
-      <!-- First Segment (Empty) -->
-
       <!-- Second Segment (White Box with Logo) -->
       <div class="flex-1 h-full flex items-center justify-center">
         <div class="bg-white p-2 rounded-xl flex items-center">
@@ -13,19 +11,21 @@
     </header>
     <div class="bg-[#333333] h-[7%] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl flex items-center justify-center"
          :style="{ border: '0.35rem solid #CC0000' }">
-      <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">
+      <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-[6vw]">
         Finde die Errungenschaften
       </h2>
     </div>
     <div class="bg-[#333333] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl" :style="{ border: '0.35rem solid #CC0000' }">
-      <h1 class="text-[#CCCCCC] font-alegreya-sans-sc font-extrabold text-center mt-[3%] mb-[3%] text-4xl">
+      <h1 class="text-[#CCCCCC] font-alegreya-sans-sc font-extrabold text-center mt-[3%] mb-[3%] text-[9vw]">
         Errungenschaften
       </h1>
       <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">16/16</h2>
 
       <!-- Flex container for images -->
-      <div class="flex flex-wrap justify-center gap-4 p-4" v-for="badge in badges">
+      <div class="flex flex-wrap justify-center gap-4 p-4">
+        <div v-for="badge in badges"class="w-[45%]">
         <Badge :key="badge.id" :idBadge="badge.id" :unlockedBadgeIds="unlockedBadgeIds"/>
+        </div>
       </div>
     </div>
     <!-- ... (existing code) -->
@@ -70,7 +70,6 @@ export default {
     if (cachedGuid) {
       // Wenn die GUID im localStorage vorhanden ist, verwenden Sie diese
       this.generatedGuid = cachedGuid;
-      console.log('this was cached:' + cachedGuid);
     } else {
       // Wenn die GUID nicht im localStorage vorhanden ist, erstellen Sie eine neue
       this.generatedGuid = uuidv4();
@@ -101,13 +100,11 @@ export default {
     checkForAchievementId() {
       const urlParams = new URLSearchParams(window.location.search);
       const achievementIdParam = urlParams.get('achievementID');
-      console.log(achievementIdParam);
 
       if (achievementIdParam !== null) {
         const achievementId = parseInt(achievementIdParam, 10);
         if (!isNaN(achievementId)) {
           // Call addAchievement with the extracted achievementId
-          console.log('Die achievement Id aus der url ist:' + achievementId);
           this.addAchievement(achievementId);
         }
       }
@@ -187,11 +184,6 @@ export default {
           });
     },
 
-    addRandomAchievement() {
-      const randomID = Math.floor(Math.random() * (16)); // Random number from 1 to 16
-      this.addAchievement(randomID);
-    },
-
     async addAchievement(scannedID) {
       try {
         console.log('Request Body:', JSON.stringify({
@@ -215,18 +207,11 @@ export default {
         }
 
         // No need to read the response body if not used
-        this.updateBadges();
         console.log('Added achievement successfully');
         console.log(this.unlockedBadgeIds);
-        await this.updateBadges();
       } catch (error) {
         console.error('Error adding achievement:', error);
       }
-    },
-    async updateBadges() {
-      // Call generateBadges to update the badges array
-      //await this.fetchAchievementsData();
-      this.fetchAchievementsData();
     },
   },
 };

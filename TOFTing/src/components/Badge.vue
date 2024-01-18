@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[45%] h-auto rounded-md" @click="navigateToAchievement">
+  <div class="rounded-md" @click="navigateToAchievement">
     <img :src="achievementPath" class="w-full h-full rounded-md" />
   </div>
 </template>

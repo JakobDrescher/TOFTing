@@ -27,7 +27,7 @@
       <h1 class="text-[#CCCCCC] font-alegreya-sans-sc font-extrabold text-center mt-[3%] mb-[3%] text-4xl">
         Errungenschaften
       </h1>
-      <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">16/16</h2>
+      <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">{{ unlockedBadgeIds.length }}/16</h2>
 
       <!-- Flex container for images -->
       <div class="flex flex-wrap justify-center gap-4 p-4">
@@ -92,6 +92,12 @@ export default {
         }
       }
     });
+    
+    this.achievementChannel = new BroadcastChannel('achievementChannel');
+    this.achievementChannel.onmessage = (event) => {
+      const newAchievementID = event.data.achievementID;
+      this.addAchievement(newAchievementID);
+    };
   },
   methods: {
     async fetchCachedAchievementIds() {
@@ -216,6 +222,7 @@ export default {
         console.log(this.unlockedBadgeIds);
 
         this.updateBadges();
+        this.achievementChannel.postMessage({ achievementID: scannedID });
       } catch (error) {
         console.error('Error adding achievement:', error);
       }

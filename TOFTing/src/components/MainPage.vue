@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-cover bg-center h-screen min-h-screen">
+  <div class="h-screen min-h-screen">
     <header class="bg-[#333333] h-[10%] flex items-center">
       <!-- First Segment (Empty) -->
       <div class="flex-1 mx-5">
@@ -14,7 +14,6 @@
 
       <!-- Third Segment (Scalable Camera Icon) -->
       <div class="flex-1 flex items-center justify-end pr-8">
-        <img src="@/assets/Kamera.png" class="max-w-full h-auto" alt="Camera Icon" />
       </div>
     </header>
     <div class="bg-[#333333] h-[7%] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl flex items-center justify-center"
@@ -92,7 +91,7 @@ export default {
         }
       }
     });
-    
+
     this.achievementChannel = new BroadcastChannel('achievementChannel');
     this.achievementChannel.onmessage = (event) => {
       const newAchievementID = event.data.achievementID;
@@ -152,11 +151,16 @@ export default {
     },
 
     extractUnlockedBadgeIds() {
-      this.unlockedBadgeIds = this.allAchievements
+      const extractedIds = this.allAchievements
         .filter((achievement) => achievement.id !== undefined)
         .map((achievement) => parseInt(achievement.id, 10));
 
-      this.unlockedBadgeIds = Array.from(this.unlockedBadgeIds);
+      // Create a Set to ensure unique IDs
+      const uniqueIdsSet = new Set(extractedIds);
+
+      // Convert the Set back to an array
+      this.unlockedBadgeIds = Array.from(uniqueIdsSet);
+
       console.log('Extracted Achievement IDs:', this.unlockedBadgeIds);
 
       this.saveCachedAchievementIds();
@@ -196,7 +200,8 @@ export default {
     },
 
     async addAchievement(scannedID) {
-      try {
+      if(!this.unlockedBadgeIds.includes(scannedID)){
+        try {
         console.log('Request Body:', JSON.stringify({
           guid: this.generatedGuid,
           achievementID: scannedID,
@@ -226,6 +231,7 @@ export default {
       } catch (error) {
         console.error('Error adding achievement:', error);
       }
+      }
     },
 
     updateBadges() {
@@ -242,10 +248,10 @@ export default {
   font-family: 'Alegreya Sans SC', sans-serif;
 }
 
-.bgi {
-  background-image: url('@/assets/Hintergrund.png');
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
+body {
+    background-image: url("../assets/Hintergrund.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
 }
 </style>

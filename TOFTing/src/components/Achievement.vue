@@ -79,11 +79,4 @@ export default {
 .font-alegreya-sans-sc {
   font-family: 'Alegreya Sans SC', sans-serif;
 }
-
-body {
-    background-image: url("../assets/Hintergrund.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-}
 </style>

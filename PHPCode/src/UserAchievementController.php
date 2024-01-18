@@ -13,7 +13,7 @@ use Jdres\Tofting\User;
 use PDO;
 
 //localhost might need to be replaced with another hostname when running on the live server
-const DB = new PDO('mysql:host=e149819-mysql.services.easyname.eu:3307;dbname=u234111db1;charset=utf8mb4', 'u234111db1','T0ft1NG');
+const DB = new PDO('mysql:host=mysql80.local:3307;dbname=u234111db1;charset=utf8mb4', 'u234111db1','T0ft1NG');
 DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 class UserAchievementController

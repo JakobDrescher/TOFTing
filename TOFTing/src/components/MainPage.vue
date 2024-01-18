@@ -80,6 +80,7 @@ export default {
     if (cachedGuid) {
       // Wenn die GUID im localStorage vorhanden ist, verwenden Sie diese
       this.generatedGuid = cachedGuid;
+      console.log('Guid:' + cachedGuid);
     } else {
       // Wenn die GUID nicht im localStorage vorhanden ist, erstellen Sie eine neue
       this.generatedGuid = uuidv4();

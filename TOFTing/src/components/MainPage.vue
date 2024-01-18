@@ -66,64 +66,52 @@ export default {
       unlockedBadgeIds: [],
       badges: [],
       generatedGuid: '',
-      saveInCache: true, // Enable or disable saving in cache
+      saveInCache: true,
+      loading: false,
     };
   },
   async mounted() {
-    // Try to retrieve the GUID from localStorage
     const cachedGuid = localStorage.getItem('myCachedGuid');
 
     if (cachedGuid) {
-      // If the GUID is in localStorage, use it
       this.generatedGuid = cachedGuid;
-      console.log('this was cached:' + cachedGuid);
     } else {
-      // If the GUID is not in localStorage, create a new one
       this.generatedGuid = uuidv4();
       localStorage.setItem('myCachedGuid', this.generatedGuid);
       this.createUser(this.generatedGuid);
     }
 
-    // Fetch achievements data
-    await this.fetchAchievementsData();
-
-    // Check for achievement ID in the URL when the component is created
+    this.fetchCachedAchievementIds();
     this.checkForAchievementId();
 
-    // React to route changes
     this.$router.afterEach((to, from) => {
       if (to.name === 'Achievement') {
-        // Extract the achievementId from the route params
         const achievementId = parseInt(to.params.achievementId, 10);
         if (!isNaN(achievementId)) {
-          // Call addAchievement with the extracted achievementId
           this.addAchievement(achievementId);
         }
       }
     });
   },
-
   methods: {
-    fetchCachedAchievementIds() {
-      const cachedAchievementIds = localStorage.getItem('cachedAchievementIds');
+    async fetchCachedAchievementIds() {
+      const cachedAchievementIds = sessionStorage.getItem('cachedAchievementIds');
       if (cachedAchievementIds) {
         this.unlockedBadgeIds = JSON.parse(cachedAchievementIds);
-        // Work with cached achievement IDs here
         this.generateBadges();
       } else {
-        // If no cached IDs, fetch from the API for the first time
-        this.fetchAchievementsData();
+        await this.fetchAchievementsData();
       }
     },
 
     saveCachedAchievementIds() {
-      localStorage.setItem('cachedAchievementIds', JSON.stringify(this.unlockedBadgeIds));
-      // Work with cached achievement IDs here
+      sessionStorage.setItem('cachedAchievementIds', JSON.stringify(this.unlockedBadgeIds));
       this.generateBadges();
     },
 
     async fetchAchievementsData() {
       try {
+        this.loading = true;
         const response = await fetch('http://api.tofting.at/?guid=' + this.generatedGuid);
         if (!response.ok) {
           throw new Error('Failed to fetch achievements data');
@@ -133,19 +121,13 @@ export default {
         this.extractUnlockedBadgeIds();
       } catch (error) {
         console.error('Error fetching achievement data:', error);
+      } finally {
+        this.loading = false;
       }
     },
 
     generateBadges() {
       this.badges = [];
-
-      if (this.unlockedBadgeIds) {
-        // Ensure that unlockedBadgeIds is a regular array
-        this.unlockedBadgeIds = Array.from(this.unlockedBadgeIds);
-
-        // Log the extracted achievement IDs
-        console.log('Extracted Achievement IDs:', this.unlockedBadgeIds);
-      }
 
       for (let index = 1; index <= 16; index++) {
         this.badges.push({ id: index });
@@ -164,18 +146,13 @@ export default {
     },
 
     extractUnlockedBadgeIds() {
-      // Ensure that unlockedBadgeIds is a regular array
       this.unlockedBadgeIds = this.allAchievements
         .filter((achievement) => achievement.id !== undefined)
         .map((achievement) => parseInt(achievement.id, 10));
 
-      // Convert the array to a regular JavaScript array
       this.unlockedBadgeIds = Array.from(this.unlockedBadgeIds);
-
-      // Log the extracted achievement IDs
       console.log('Extracted Achievement IDs:', this.unlockedBadgeIds);
 
-      // Save the extracted IDs in the cache
       this.saveCachedAchievementIds();
     },
 
@@ -187,7 +164,6 @@ export default {
       if (achievementIdParam !== null) {
         const achievementId = parseInt(achievementIdParam, 10);
         if (!isNaN(achievementId)) {
-          // Call addAchievement with the extracted achievementId
           console.log('Die achievement Id aus der url ist:' + achievementId);
           this.addAchievement(achievementId);
         }
@@ -206,12 +182,10 @@ export default {
           if (!response.ok) {
             throw new Error('Failed to create user');
           }
-          // Handle successful response if needed
           console.log('User created successfully');
         })
         .catch(error => {
           console.error('Error creating user:', error);
-          // Handle error or provide user feedback
         });
     },
 
@@ -237,29 +211,22 @@ export default {
           throw new Error(`Failed to add achievement. Status: ${response.status}`);
         }
 
-        // Update unlockedBadgeIds before calling updateBadges
         this.unlockedBadgeIds.push(scannedID);
         console.log('Added achievement successfully');
         console.log(this.unlockedBadgeIds);
 
-        // Call updateBadges to update the badges array
-        await this.updateBadges();
+        this.updateBadges();
       } catch (error) {
         console.error('Error adding achievement:', error);
       }
     },
 
-    async updateBadges() {
-      // Check if unlockedBadgeIds is defined before using it
-      if (this.unlockedBadgeIds) {
-        // Call generateBadges to update the badges array
-        this.generateBadges();
-      }
-    }
+    updateBadges() {
+      this.saveCachedAchievementIds();
+    },
   },
 };
 </script>
-
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@400;700;800&display=swap');

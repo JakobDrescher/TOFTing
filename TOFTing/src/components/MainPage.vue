@@ -2,27 +2,17 @@
   <div class="bg-cover bg-center h-screen min-h-screen">
     <header class="bg-[#333333] h-[10%] flex items-center">
       <!-- First Segment (Empty) -->
-      <div class="flex-1 mx-5">
-        <button @click="addRandomAchievement"
-          class="bg-[#FFFFFF] text-[#333333] py-[2%] rounded-md border-2 border-[#CC0000]">
-          Add Random Achievement
-        </button>
-      </div>
 
       <!-- Second Segment (White Box with Logo) -->
       <div class="flex-1 h-full flex items-center justify-center">
         <div class="bg-white p-2 rounded-xl flex items-center">
-          <img src="@/assets/logo.png" class="w-30 h-8 mx-auto" alt="Logo" />
+          <img src="@/assets/logo.png" class="w-30 h-8 mx-auto" alt="Logo"/>
         </div>
       </div>
 
-      <!-- Third Segment (Scalable Camera Icon) -->
-      <div class="flex-1 flex items-center justify-end pr-8">
-        <img src="@/assets/Kamera.png" class="max-w-full h-auto" alt="Camera Icon" />
-      </div>
     </header>
     <div class="bg-[#333333] h-[7%] w-[90%] mb-[3%] mt-[3%] mx-auto rounded-3xl flex items-center justify-center"
-      :style="{ border: '0.35rem solid #CC0000' }">
+         :style="{ border: '0.35rem solid #CC0000' }">
       <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">
         Finde die Errungenschaften
       </h2>
@@ -34,8 +24,8 @@
       <h2 class="text-[#CCCCCC] font-alegreya-sans-sc font-bold text-center text-xl">16/16</h2>
 
       <!-- Flex container for images -->
-      <div class="flex flex-wrap justify-center gap-4 p-4">
-        <Badge v-for="badge in badges" :key="badge.id" :idBadge="badge.id" :unlockedBadgeIds="unlockedBadgeIds" />
+      <div class="flex flex-wrap justify-center gap-4 p-4" v-for="badge in badges">
+        <Badge :key="badge.id" :idBadge="badge.id" :unlockedBadgeIds="unlockedBadgeIds"/>
       </div>
     </div>
     <!-- ... (existing code) -->
@@ -45,12 +35,12 @@
       </div>
       <div class="flex-1 flex items-center justify-center">
         <a href="https://linktr.ee/tofting?utm_source=linktree_profile_share&ltsid=59e713d6-cc5d-4467-ac43-1b5a8384219f">
-          <img src="@/assets/tofting.png" class="w-[4em] h-[4em]" />
+          <img src="@/assets/tofting.png" class="w-[4em] h-[4em]"/>
         </a>
       </div>
       <div class="flex-1 flex items-center justify-end mr-4">
         <a href="https://www.easyname.at/de">
-          <img src="@/assets/Alternative Logo.svg" class="w-[6em] h-[6em]" />
+          <img src="@/assets/Alternative Logo.svg" class="w-[6em] h-[6em]"/>
         </a>
       </div>
     </footer>
@@ -59,7 +49,7 @@
 
 <script>
 import Badge from '@/components/Badge.vue';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 export default {
   components: {
@@ -90,10 +80,10 @@ export default {
       this.createUser(this.generatedGuid);
     }
 
-    this.fetchAchievementsData();
-
     // Check for achievement ID in the URL when the component is created
     this.checkForAchievementId();
+
+    this.fetchAchievementsData();
 
     // React to route changes
     this.$router.afterEach((to, from) => {
@@ -125,13 +115,17 @@ export default {
 
     async fetchAchievementsData() {
       try {
-        const response = await fetch('http://api.tofting.at/?guid=' + localStorage.getItem('myCachedGuid'));
+        const response = await fetch('http://api.tofting.at/?guid=' + localStorage.getItem('myCachedGuid'), {
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch achievements data');
         }
         const data = await response.json();
         this.allAchievements = data;
-        
+
         this.extractUnlockedBadgeIds();
       } catch (error) {
         console.error('Error fetching achievement data:', error);
@@ -141,8 +135,8 @@ export default {
     extractUnlockedBadgeIds() {
       // Ensure that unlockedBadgeIds is a regular array
       this.unlockedBadgeIds = this.allAchievements
-        .filter((achievement) => achievement.id !== undefined)
-        .map((achievement) => parseInt(achievement.id, 10));
+          .filter((achievement) => achievement.id !== undefined)
+          .map((achievement) => parseInt(achievement.id, 10));
 
       // Convert the array to a regular JavaScript array
       this.unlockedBadgeIds = Array.from(this.unlockedBadgeIds);
@@ -157,7 +151,7 @@ export default {
     generateBadges() {
       this.badges = [];
       for (let index = 1; index <= 16; index++) {
-        this.badges.push({ id: index });
+        this.badges.push({id: index});
       }
 
       // Log the generated badges
@@ -178,19 +172,19 @@ export default {
         headers: {
           'Content-Type': 'text/json',
         },
-        body: JSON.stringify({ guid: setGuid }),
+        body: JSON.stringify({guid: setGuid}),
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Failed to create user');
-          }
-          // Handle successful response if needed
-          console.log('User created successfully');
-        })
-        .catch(error => {
-          console.error('Error creating user:', error);
-          // Handle error or provide user feedback
-        });
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to create user');
+            }
+            // Handle successful response if needed
+            console.log('User created successfully');
+          })
+          .catch(error => {
+            console.error('Error creating user:', error);
+            // Handle error or provide user feedback
+          });
     },
 
     addRandomAchievement() {
@@ -221,7 +215,7 @@ export default {
         }
 
         // No need to read the response body if not used
-        this.unlockedBadgeIds.push(scannedID);
+        this.updateBadges();
         console.log('Added achievement successfully');
         console.log(this.unlockedBadgeIds);
         await this.updateBadges();
@@ -232,7 +226,7 @@ export default {
     async updateBadges() {
       // Call generateBadges to update the badges array
       //await this.fetchAchievementsData();
-      this.generateBadges();
+      this.fetchAchievementsData();
     },
   },
 };
